@@ -2,7 +2,8 @@
 // HeatMapView.h : interface of the CHeatMapView class
 //
 
-#pragma once
+#pragma once 
+#include<vector>
 
 
 class CHeatMapView : public CView
@@ -14,7 +15,18 @@ protected: // create from serialization only
 // Attributes
 public:
 	CHeatMapDoc* GetDocument() const;
-
+	CRect rect;
+//custom members and functions 
+private:
+	std::vector<std::vector<std::vector<int>>> _cellColorMatrix;
+	int _cellSize = 5;
+	int rows;
+	int columns;
+public:
+	void InitializeCells(int rows, int columns);
+	void UpdateCellColor(int row, int col);
+	void SetRows();
+	void SetColumns();
 // Operations
 public:
 

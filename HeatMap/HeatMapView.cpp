@@ -49,6 +49,32 @@ BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CHeatMapView drawing
 
+void CHeatMapView::InitializeCells(int rows, int columns)
+{
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < columns; ++j) {
+			_cellColorMatrix[i][j] = {255,255,255};
+		}
+	}
+}
+
+void CHeatMapView::UpdateCellColor(int row, int col)
+{
+	for (int i = 0; i < 3; ++i) {
+		_cellColorMatrix[row][col][i] -= 10;
+	}
+}
+
+void CHeatMapView::SetRows()
+{
+	rows = rect.bottom / _cellSize;
+}
+
+void CHeatMapView::SetColumns()
+{
+	columns = rect.right / _cellSize;
+}
+
 void CHeatMapView::OnDraw(CDC* /*pDC*/)
 {
 	CHeatMapDoc* pDoc = GetDocument();
