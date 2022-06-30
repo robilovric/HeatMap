@@ -23,11 +23,16 @@ private:
 	int _cellSize = 5;
 	int rows;
 	int columns;
+	CBrush brush;
 public:
 	void InitializeCells();
 	void UpdateCellColor(int IdCell);
+	void SetColumns();;
 	void SetRows();
-	void SetColumns();
+	int GetRows();
+	int GetColumns();
+	COLORREF GetCellColor(int idCell);
+	CRect CreateRect(int left, int top);
 // Operations
 public:
 

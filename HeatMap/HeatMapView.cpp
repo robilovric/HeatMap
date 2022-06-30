@@ -1,4 +1,4 @@
-
+﻿
 // HeatMapView.cpp : implementation of the CHeatMapView class
 //
 
@@ -32,7 +32,9 @@ END_MESSAGE_MAP()
 CHeatMapView::CHeatMapView() noexcept
 {
 	// TODO: add construction code here
-
+	SetRows();     //dali je primjereno ove funkcije pozivati ovdje u konstruktoru view-a 
+	SetColumns();  // builda se program no cim se digne prozor bude runtime error koji se žali da pada assert u afxwin2.inl linija 86 nešto sam zbrlja s window-om ocito
+	InitializeCells(); //i nesvida mi se što je rect.bottom inicijalno 0 gdje bi bilo zgodno primjeniti SetViewportExtEx() mozda odmah u konstrukoru ovjde takoder?
 }
 
 CHeatMapView::~CHeatMapView()
@@ -51,7 +53,11 @@ BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CHeatMapView::InitializeCells()
 {
-	_cellColorMatrix.push_back(_rgb);
+	for (int i = 0; i < GetRows(); ++i) {
+		for (int j = 0; j < GetColumns(); ++j) {
+			_cellColorMatrix.push_back(_rgb);
+		}
+	}
 }
 
 void CHeatMapView::UpdateCellColor(int idCell)
@@ -62,15 +68,37 @@ void CHeatMapView::UpdateCellColor(int idCell)
 
 void CHeatMapView::SetRows()
 {
+	GetClientRect(&rect);
 	rows = rect.bottom / _cellSize;
 }
 
 void CHeatMapView::SetColumns()
 {
+	GetClientRect(&rect);
 	columns = rect.right / _cellSize;
 }
 
-void CHeatMapView::OnDraw(CDC* /*pDC*/)
+int CHeatMapView::GetRows()
+{
+	return rows;
+}
+
+int CHeatMapView::GetColumns()
+{
+	return columns;
+}
+
+COLORREF CHeatMapView::GetCellColor(int idCell)
+{
+	return RGB(_cellColorMatrix[idCell][0], _cellColorMatrix[idCell][1], _cellColorMatrix[idCell][2]);
+}
+
+CRect CHeatMapView::CreateRect(int left, int top)
+{
+	return { left, top, left + _cellSize, top + _cellSize };
+}
+
+void CHeatMapView::OnDraw(CDC* pDC)
 {
 	CHeatMapDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -78,6 +106,17 @@ void CHeatMapView::OnDraw(CDC* /*pDC*/)
 		return;
 
 	// TODO: add draw code for native data here
+	GetClientRect(&rect);
+	SetRows(); SetColumns();
+
+	for (int i = 0; i < GetRows(); ++i) {
+		for (int j = 0; j < GetColumns(); ++j) {
+			int cellID = i * columns + j;
+			brush.CreateSolidBrush(GetCellColor(cellID));
+			pDC->FillRect(CreateRect(j * _cellSize, i * _cellSize), &brush);
+		}
+	}
+	DeleteObject(brush);
 }
 
 void CHeatMapView::OnRButtonUp(UINT /* nFlags */, CPoint point)
