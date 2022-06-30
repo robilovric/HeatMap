@@ -18,13 +18,14 @@ public:
 	CRect rect;
 //custom members and functions 
 private:
-	std::vector<std::vector<std::vector<int>>> _cellColorMatrix;
+	std::vector<std::vector<int>> _cellColorMatrix;
+	std::vector<int> _rgb = { 255,255,255 };
 	int _cellSize = 5;
 	int rows;
 	int columns;
 public:
-	void InitializeCells(int rows, int columns);
-	void UpdateCellColor(int row, int col);
+	void InitializeCells();
+	void UpdateCellColor(int IdCell);
 	void SetRows();
 	void SetColumns();
 // Operations
