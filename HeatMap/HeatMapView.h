@@ -18,21 +18,21 @@ public:
 	CRect rect;
 //custom members and functions 
 private:
-	std::vector<std::vector<int>> _cellColorMatrix;
-	std::vector<int> _rgb = { 255,255,255 };
-	int _cellSize = 5;
+	std::vector<std::vector<unsigned int>> _cellColorMatrix;
+	std::vector<unsigned int> _matrixRow;
+	int _cellSize = 100;
 	int rows;
 	int columns;
-	CBrush brush;
 public:
 	void InitializeCells();
-	void UpdateCellColor(int IdCell);
+	void UpdateCellColor(int row, int col);
 	void SetColumns();;
 	void SetRows();
 	int GetRows();
 	int GetColumns();
-	COLORREF GetCellColor(int idCell);
+	COLORREF GetCellColor(int row, int col);
 	CRect CreateRect(int left, int top);
+	void OnInitialUpdate() override;
 // Operations
 public:
 
@@ -58,6 +58,8 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in HeatMapView.cpp

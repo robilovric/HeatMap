@@ -25,6 +25,7 @@ IMPLEMENT_DYNCREATE(CHeatMapView, CView)
 BEGIN_MESSAGE_MAP(CHeatMapView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CHeatMapView construction/destruction
@@ -32,14 +33,12 @@ END_MESSAGE_MAP()
 CHeatMapView::CHeatMapView() noexcept
 {
 	// TODO: add construction code here
-	SetRows();     //dali je primjereno ove funkcije pozivati ovdje u konstruktoru view-a 
-	SetColumns();  // builda se program no cim se digne prozor bude runtime error koji se žali da pada assert u afxwin2.inl linija 86 nešto sam zbrlja s window-om ocito
-	InitializeCells(); //i nesvida mi se što je rect.bottom inicijalno 0 gdje bi bilo zgodno primjeniti SetViewportExtEx() mozda odmah u konstrukoru ovjde takoder?
 }
 
 CHeatMapView::~CHeatMapView()
 {
 }
+
 
 BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 {
@@ -53,17 +52,21 @@ BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CHeatMapView::InitializeCells()
 {
-	for (int i = 0; i < GetRows(); ++i) {
-		for (int j = 0; j < GetColumns(); ++j) {
-			_cellColorMatrix.push_back(_rgb);
+	int numRows = GetRows();
+	int numColumns = GetColumns();
+	for (int i = 0; i < numRows; ++i) {
+		for (int j = 0; j < numColumns; ++j) {
+			_matrixRow.push_back(0);
 		}
+		_cellColorMatrix.push_back(_matrixRow);
+		_matrixRow.clear();
 	}
+	_matrixRow.clear();
 }
 
-void CHeatMapView::UpdateCellColor(int idCell)
+void CHeatMapView::UpdateCellColor(int row, int col)
 {
-	_cellColorMatrix[idCell][0] = _rgb[0] - 20;
-
+	_cellColorMatrix[row][col] += 1;
 }
 
 void CHeatMapView::SetRows()
@@ -88,14 +91,36 @@ int CHeatMapView::GetColumns()
 	return columns;
 }
 
-COLORREF CHeatMapView::GetCellColor(int idCell)
+COLORREF CHeatMapView::GetCellColor(int row, int col)
 {
-	return RGB(_cellColorMatrix[idCell][0], _cellColorMatrix[idCell][1], _cellColorMatrix[idCell][2]);
+	switch (_cellColorMatrix[row][col])
+	{
+	case 0:
+		return RGB(0, 0, 255); // za debug svrhe sam maka iz bijele boje 
+	case 1:
+		return RGB(51, 255, 153); //prozirno zelena
+	case 2:
+		return RGB(0, 255, 0); //zelena
+	case 3:
+		return RGB(255, 51, 153); //roskasta
+	case 4:
+		return RGB(255, 0, 0); // crvena
+	default:
+		break; //proširit ću spektar poslje
+	}
+	return RGB(0, 0, 0);
 }
 
 CRect CHeatMapView::CreateRect(int left, int top)
 {
 	return { left, top, left + _cellSize, top + _cellSize };
+}
+
+void CHeatMapView::OnInitialUpdate()
+{
+	SetRows();
+	SetColumns();
+	InitializeCells();
 }
 
 void CHeatMapView::OnDraw(CDC* pDC)
@@ -107,16 +132,17 @@ void CHeatMapView::OnDraw(CDC* pDC)
 
 	// TODO: add draw code for native data here
 	GetClientRect(&rect);
-	SetRows(); SetColumns();
-
-	for (int i = 0; i < GetRows(); ++i) {
-		for (int j = 0; j < GetColumns(); ++j) {
-			int cellID = i * columns + j;
-			brush.CreateSolidBrush(GetCellColor(cellID));
+	//SetRows(); SetColumns();
+	int numRows = GetRows();
+	int numColumns = GetColumns();
+	for (int i = 0; i < numRows; ++i) {
+		for (int j = 0; j < numColumns; ++j) {
+			CBrush brush;
+			brush.CreateSolidBrush(GetCellColor(i, j));
 			pDC->FillRect(CreateRect(j * _cellSize, i * _cellSize), &brush);
 		}
 	}
-	DeleteObject(brush);
+
 }
 
 void CHeatMapView::OnRButtonUp(UINT /* nFlags */, CPoint point)
@@ -155,3 +181,12 @@ CHeatMapDoc* CHeatMapView::GetDocument() const // non-debug version is inline
 
 
 // CHeatMapView message handlers
+
+
+void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+	UpdateCellColor(point.x / _cellSize, point.y / _cellSize); //testing
+	Invalidate();
+	CView::OnLButtonDown(nFlags, point);
+}
