@@ -26,6 +26,7 @@ BEGIN_MESSAGE_MAP(CHeatMapView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // CHeatMapView construction/destruction
@@ -60,12 +61,16 @@ void CHeatMapView::InitializeCells()
 		}
 		_cellColorMatrix.push_back(_matrixRow);
 		_matrixRow.clear();
+		_matrixRow.shrink_to_fit();
 	}
-	_matrixRow.clear();
 }
 
 void CHeatMapView::UpdateCellColor(int row, int col)
 {
+	if (isResize) {
+		return;
+	}
+
 	_cellColorMatrix[row][col] += 1;
 }
 
@@ -73,12 +78,14 @@ void CHeatMapView::SetRows()
 {
 	GetClientRect(&rect);
 	rows = rect.bottom / _cellSize;
+	++rows;
 }
 
 void CHeatMapView::SetColumns()
 {
 	GetClientRect(&rect);
 	columns = rect.right / _cellSize;
+	++columns;
 }
 
 int CHeatMapView::GetRows()
@@ -93,7 +100,7 @@ int CHeatMapView::GetColumns()
 
 COLORREF CHeatMapView::GetCellColor(int row, int col)
 {
-	switch (_cellColorMatrix[row][col])
+	switch (isResize ? _cellColorMatrixLog[row][col] : _cellColorMatrix[row][col])
 	{
 	case 0:
 		return RGB(0, 0, 255); // za debug svrhe sam maka iz bijele boje 
@@ -108,6 +115,7 @@ COLORREF CHeatMapView::GetCellColor(int row, int col)
 	default:
 		break; //proširit ću spektar poslje
 	}
+	isResize = false;
 	return RGB(0, 0, 0);
 }
 
@@ -131,7 +139,7 @@ void CHeatMapView::OnDraw(CDC* pDC)
 		return;
 
 	// TODO: add draw code for native data here
-	GetClientRect(&rect);
+	//GetClientRect(&rect);
 	//SetRows(); SetColumns();
 	int numRows = GetRows();
 	int numColumns = GetColumns();
@@ -186,7 +194,29 @@ CHeatMapDoc* CHeatMapView::GetDocument() const // non-debug version is inline
 void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
-	UpdateCellColor(point.x / _cellSize, point.y / _cellSize); //testing
-	Invalidate();
 	CView::OnLButtonDown(nFlags, point);
+	UpdateCellColor(point.y / _cellSize, point.x / _cellSize);
+	Invalidate();
+
+}
+
+
+void CHeatMapView::OnSize(UINT nType, int cx, int cy)
+{
+	CView::OnSize(nType, cx, cy);
+
+	// TODO: Add your message handler code here
+	if (isInitialOnSize) {
+		isInitialOnSize = false;
+		return;
+	}
+	rows = cy / _cellSize + 1;
+	columns = cx / _cellSize + 1;
+	InitializeCells();
+	_cellColorMatrix.swap(_cellColorMatrixLog);
+	_cellColorMatrix.clear();
+	_cellColorMatrix.shrink_to_fit();
+
+	isResize = true;
+
 }

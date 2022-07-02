@@ -19,10 +19,13 @@ public:
 //custom members and functions 
 private:
 	std::vector<std::vector<unsigned int>> _cellColorMatrix;
+	std::vector<std::vector<unsigned int>> _cellColorMatrixLog;
 	std::vector<unsigned int> _matrixRow;
 	int _cellSize = 100;
 	int rows;
 	int columns;
+	bool isResize;
+	bool isInitialOnSize = true;
 public:
 	void InitializeCells();
 	void UpdateCellColor(int row, int col);
@@ -60,6 +63,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 #ifndef _DEBUG  // debug version in HeatMapView.cpp
