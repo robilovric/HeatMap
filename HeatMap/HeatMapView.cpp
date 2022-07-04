@@ -67,26 +67,9 @@ void CHeatMapView::InitializeCells()
 
 void CHeatMapView::UpdateCellColor(int row, int col)
 {
-	if (isResize) {
-		return;
-	}
-
 	_cellColorMatrix[row][col] += 1;
 }
 
-void CHeatMapView::SetRows()
-{
-	GetClientRect(&rect);
-	rows = rect.bottom / _cellSize;
-	++rows;
-}
-
-void CHeatMapView::SetColumns()
-{
-	GetClientRect(&rect);
-	columns = rect.right / _cellSize;
-	++columns;
-}
 
 int CHeatMapView::GetRows()
 {
@@ -100,7 +83,7 @@ int CHeatMapView::GetColumns()
 
 COLORREF CHeatMapView::GetCellColor(int row, int col)
 {
-	switch (isResize ? _cellColorMatrixLog[row][col] : _cellColorMatrix[row][col])
+	switch (_cellColorMatrix[row][col])
 	{
 	case 0:
 		return RGB(0, 0, 255); // za debug svrhe sam maka iz bijele boje 
@@ -115,20 +98,26 @@ COLORREF CHeatMapView::GetCellColor(int row, int col)
 	default:
 		break; //proširit ću spektar poslje
 	}
-	isResize = false;
 	return RGB(0, 0, 0);
 }
 
 CRect CHeatMapView::CreateRect(int left, int top)
 {
-	return { left, top, left + _cellSize, top + _cellSize };
+	return { left, top, left + _cellSize.x, top + _cellSize.y };
 }
 
 void CHeatMapView::OnInitialUpdate()
 {
-	SetRows();
-	SetColumns();
 	InitializeCells();
+}
+
+void CHeatMapView::SetCellSize()
+{
+	//GetClientRect(&rect);
+	int X = GetSystemMetrics(SM_CXSCREEN);
+	int Y = GetSystemMetrics(SM_CYSCREEN);
+	_cellSize.y = Y / rows;
+	_cellSize.x = X / columns;
 }
 
 void CHeatMapView::OnDraw(CDC* pDC)
@@ -139,15 +128,15 @@ void CHeatMapView::OnDraw(CDC* pDC)
 		return;
 
 	// TODO: add draw code for native data here
-	//GetClientRect(&rect);
-	//SetRows(); SetColumns();
 	int numRows = GetRows();
 	int numColumns = GetColumns();
+
+	SetCellSize();
 	for (int i = 0; i < numRows; ++i) {
 		for (int j = 0; j < numColumns; ++j) {
 			CBrush brush;
 			brush.CreateSolidBrush(GetCellColor(i, j));
-			pDC->FillRect(CreateRect(j * _cellSize, i * _cellSize), &brush);
+			pDC->FillRect(CreateRect(j * _cellSize.x, i * _cellSize.y), &brush);
 		}
 	}
 
@@ -195,8 +184,10 @@ void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
 	CView::OnLButtonDown(nFlags, point);
-	UpdateCellColor(point.y / _cellSize, point.x / _cellSize);
-	Invalidate();
+	int row = point.y / _cellSize.y;
+	int col = point.x / _cellSize.x;
+	UpdateCellColor(row, col);
+	InvalidateRect(CreateRect(col * _cellSize.x, row * _cellSize.y));
 
 }
 
@@ -204,19 +195,8 @@ void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 {
 	CView::OnSize(nType, cx, cy);
-
 	// TODO: Add your message handler code here
-	if (isInitialOnSize) {
-		isInitialOnSize = false;
-		return;
-	}
-	rows = cy / _cellSize + 1;
-	columns = cx / _cellSize + 1;
-	InitializeCells();
-	_cellColorMatrix.swap(_cellColorMatrixLog);
-	_cellColorMatrix.clear();
-	_cellColorMatrix.shrink_to_fit();
+	Invalidate();
 
-	isResize = true;
 
 }

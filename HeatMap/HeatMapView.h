@@ -19,23 +19,19 @@ public:
 //custom members and functions 
 private:
 	std::vector<std::vector<unsigned int>> _cellColorMatrix;
-	std::vector<std::vector<unsigned int>> _cellColorMatrixLog;
 	std::vector<unsigned int> _matrixRow;
-	int _cellSize = 100;
-	int rows;
-	int columns;
-	bool isResize;
-	bool isInitialOnSize = true;
+	POINT _cellSize;
+	int rows = 100;
+	int columns = 120;
 public:
 	void InitializeCells();
 	void UpdateCellColor(int row, int col);
-	void SetColumns();;
-	void SetRows();
 	int GetRows();
 	int GetColumns();
 	COLORREF GetCellColor(int row, int col);
 	CRect CreateRect(int left, int top);
 	void OnInitialUpdate() override;
+	void SetCellSize();
 // Operations
 public:
 
