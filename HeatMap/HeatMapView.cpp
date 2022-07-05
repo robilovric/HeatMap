@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CHeatMapView, CView)
 	ON_WM_RBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_SIZE()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CHeatMapView construction/destruction
@@ -53,6 +54,8 @@ BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CHeatMapView::InitializeCells()
 {
+	_lastCell.x = -1;
+	_lastCell.y = -1;
 	int numRows = GetRows();
 	int numColumns = GetColumns();
 	for (int i = 0; i < numRows; ++i) {
@@ -183,20 +186,35 @@ CHeatMapDoc* CHeatMapView::GetDocument() const // non-debug version is inline
 void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
-	CView::OnLButtonDown(nFlags, point);
 	int row = point.y / _cellSize.y;
 	int col = point.x / _cellSize.x;
 	UpdateCellColor(row, col);
 	InvalidateRect(CreateRect(col * _cellSize.x, row * _cellSize.y));
 
+	CView::OnLButtonDown(nFlags, point); //dali je ovo potrebno?
 }
 
 
 void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 {
-	CView::OnSize(nType, cx, cy);
 	// TODO: Add your message handler code here
 	Invalidate();
 
+	CView::OnSize(nType, cx, cy);
 
+}
+
+
+void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+	int row = point.y / _cellSize.y;
+	int col = point.x / _cellSize.x;
+	if (row != _lastCell.x || col != _lastCell.y) {
+		_lastCell.x = row; _lastCell.y = col;
+		UpdateCellColor(row, col);
+		InvalidateRect(CreateRect(col * _cellSize.x, row * _cellSize.y));
+	}
+
+	CView::OnMouseMove(nFlags, point); //i ovo takodjer? jer to bude po defaultu izgenerirano kad dodam handler
 }

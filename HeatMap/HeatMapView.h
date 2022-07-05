@@ -21,7 +21,8 @@ private:
 	std::vector<std::vector<unsigned int>> _cellColorMatrix;
 	std::vector<unsigned int> _matrixRow;
 	POINT _cellSize;
-	int rows = 100;
+	POINT _lastCell;
+	int rows = 50;
 	int columns = 120;
 public:
 	void InitializeCells();
@@ -60,6 +61,7 @@ protected:
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in HeatMapView.cpp
