@@ -32,7 +32,7 @@ public:
 	COLORREF GetCellColor(int row, int col);
 	CRect CreateRect(int left, int top);
 	void OnInitialUpdate() override;
-	void SetCellSize();
+	void SetCellSize(int width, int height);
 // Operations
 public:
 

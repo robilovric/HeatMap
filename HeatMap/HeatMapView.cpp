@@ -116,15 +116,15 @@ void CHeatMapView::OnInitialUpdate()
 	InitializeCells();
 }
 
-void CHeatMapView::SetCellSize()
+void CHeatMapView::SetCellSize(int width, int height)
 {
 	//GetClientRect(rect);
 	//_cellSize.y = rect.bottom / rows;
 	//_cellSize.x = rect.right / columns;
-	int X = GetSystemMetrics(SM_CXSCREEN);
-	int Y = GetSystemMetrics(SM_CYSCREEN);
-	_cellSize.y = Y / rows;
-	_cellSize.x = X / columns;
+	//int X = GetSystemMetrics(SM_CXSCREEN);
+	//int Y = GetSystemMetrics(SM_CYSCREEN);
+	_cellSize.y = width / rows;
+	_cellSize.x = width / columns;
 }
 
 void CHeatMapView::OnDraw(CDC* pDC)
@@ -138,7 +138,6 @@ void CHeatMapView::OnDraw(CDC* pDC)
 	int numRows = GetRows();
 	int numColumns = GetColumns();
 
-	SetCellSize();
 	for (int i = 0; i < numRows; ++i) {
 		for (int j = 0; j < numColumns; ++j) {
 			CBrush brush;
@@ -202,7 +201,20 @@ void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 {
 	// TODO: Add your message handler code here
-	Invalidate();
+	switch (nType)
+	{
+	case SIZE_MAXIMIZED:
+		SetCellSize(cx, cy);
+		Invalidate();
+		break;
+	case SIZE_RESTORED:
+		SetCellSize(cx, cy);
+		Invalidate();
+		break;
+	default:
+		break;
+	}
+
 
 	CView::OnSize(nType, cx, cy);
 
