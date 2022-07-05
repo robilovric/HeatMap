@@ -12,6 +12,7 @@
 
 #include "HeatMapDoc.h"
 #include "HeatMapView.h"
+#include "CMatrixDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
