@@ -22,7 +22,7 @@ private:
 	std::vector<unsigned int> _matrixRow;
 	POINT _cellSize;
 	POINT _lastCell;
-	int rows = 50;
+	int rows = 60;
 	int columns = 120;
 public:
 	void InitializeCells();
@@ -62,7 +62,7 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnToolsMatrix2();
+	afx_msg void OnToolsMatrix();
 };
 
 #ifndef _DEBUG  // debug version in HeatMapView.cpp

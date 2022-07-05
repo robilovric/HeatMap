@@ -29,7 +29,7 @@ BEGIN_MESSAGE_MAP(CHeatMapView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_SIZE()
 	ON_WM_MOUSEMOVE()
-	ON_COMMAND(ID_TOOLS_MATRIX, &CHeatMapView::OnToolsMatrix2)
+	ON_COMMAND(ID_TOOLS_MATRIX, &CHeatMapView::OnToolsMatrix)
 END_MESSAGE_MAP()
 
 // CHeatMapView construction/destruction
@@ -118,7 +118,9 @@ void CHeatMapView::OnInitialUpdate()
 
 void CHeatMapView::SetCellSize()
 {
-	//GetClientRect(&rect);
+	//GetClientRect(rect);
+	//_cellSize.y = rect.bottom / rows;
+	//_cellSize.x = rect.right / columns;
 	int X = GetSystemMetrics(SM_CXSCREEN);
 	int Y = GetSystemMetrics(SM_CYSCREEN);
 	_cellSize.y = Y / rows;
@@ -221,9 +223,18 @@ void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 	CView::OnMouseMove(nFlags, point); //i ovo takodjer? jer to bude po defaultu izgenerirano kad dodam handler
 }
 
-void CHeatMapView::OnToolsMatrix2()
+void CHeatMapView::OnToolsMatrix()
 {
 	// TODO: Add your command handler code here
 	CMatrixDlg dlg;
-	dlg.DoModal();
+	dlg.m_Rows = rows;
+	dlg.m_Columns = columns;
+	if (dlg.DoModal() == IDOK) {
+		rows = dlg.m_Rows;
+		columns = dlg.m_Columns;
+		_cellColorMatrix.clear(); _cellColorMatrix.shrink_to_fit();
+		InitializeCells();
+		Invalidate();
+	}
+
 }
