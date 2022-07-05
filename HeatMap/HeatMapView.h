@@ -64,6 +64,7 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnToolsMatrix();
 	afx_msg void OnMatrix();
+	afx_msg void OnToolsMatrix2();
 };
 
 #ifndef _DEBUG  // debug version in HeatMapView.cpp

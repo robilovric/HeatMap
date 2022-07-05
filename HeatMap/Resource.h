@@ -88,18 +88,14 @@
 #define IDC_STATIC_COLUMNS              1001
 #define IDC_EDIT_ROWS                   1002
 #define IDC_EDIT_COLUMNS                1003
-#define ID_TOOLS_MATRIX                 32771
-#define ID_TOOLS_MATRIX32772            32772
-#define ID_MATRIX                       32774
-#define ID_FILE_MATRIX                  32775
-#define ID_VIEW_MATRIX                  32776
+#define ID_TOOLS_MATRIX                 32777
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        314
-#define _APS_NEXT_COMMAND_VALUE         32777
+#define _APS_NEXT_RESOURCE_VALUE        315
+#define _APS_NEXT_COMMAND_VALUE         32778
 #define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

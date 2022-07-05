@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CHeatMapView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_SIZE()
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_TOOLS_MATRIX, &CHeatMapView::OnToolsMatrix2)
 END_MESSAGE_MAP()
 
 // CHeatMapView construction/destruction
@@ -218,4 +219,11 @@ void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	CView::OnMouseMove(nFlags, point); //i ovo takodjer? jer to bude po defaultu izgenerirano kad dodam handler
+}
+
+void CHeatMapView::OnToolsMatrix2()
+{
+	// TODO: Add your command handler code here
+	CMatrixDlg dlg;
+	dlg.DoModal();
 }
