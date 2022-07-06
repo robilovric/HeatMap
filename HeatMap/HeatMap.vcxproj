@@ -186,6 +186,7 @@
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="ClassView.h" />
     <ClInclude Include="CMatrixDlg.h" />
+    <ClInclude Include="CModeDlg.h" />
     <ClInclude Include="FileView.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="HeatMap.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="ClassView.cpp" />
     <ClCompile Include="CMatrixDlg.cpp" />
+    <ClCompile Include="CModeDlg.cpp" />
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="HeatMap.cpp" />
     <ClCompile Include="HeatMapDoc.cpp" />

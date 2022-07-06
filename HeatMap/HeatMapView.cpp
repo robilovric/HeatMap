@@ -13,6 +13,7 @@
 #include "HeatMapDoc.h"
 #include "HeatMapView.h"
 #include "CMatrixDlg.h"
+#include "CModeDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,6 +31,7 @@ BEGIN_MESSAGE_MAP(CHeatMapView, CView)
 	ON_WM_SIZE()
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_TOOLS_MATRIX, &CHeatMapView::OnToolsMatrix)
+	ON_COMMAND(ID_TOOLS_MODE, &CHeatMapView::OnToolsMode)
 END_MESSAGE_MAP()
 
 // CHeatMapView construction/destruction
@@ -123,8 +125,8 @@ void CHeatMapView::SetCellSize(int width, int height)
 	//_cellSize.x = rect.right / columns;
 	//int X = GetSystemMetrics(SM_CXSCREEN);
 	//int Y = GetSystemMetrics(SM_CYSCREEN);
-	_cellSize.y = width / rows;
 	_cellSize.x = width / columns;
+	_cellSize.y = height / rows;
 }
 
 void CHeatMapView::OnDraw(CDC* pDC)
@@ -249,4 +251,12 @@ void CHeatMapView::OnToolsMatrix()
 		Invalidate();
 	}
 
+}
+
+
+void CHeatMapView::OnToolsMode()
+{
+	// TODO: Add your command handler code here
+	CModeDlg dlg;
+	dlg.DoModal();
 }
