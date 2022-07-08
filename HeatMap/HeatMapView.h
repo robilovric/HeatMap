@@ -19,11 +19,10 @@ public:
 //custom members and functions 
 private:
 	std::vector<std::vector<unsigned int>> _cellColorMatrix;
-	std::vector<unsigned int> _matrixRow;
 	POINT _cellSize;
 	POINT _lastCell;
-	int rows = 30;
-	int columns = 60;
+	int _rows = 15;
+	int _columns = 20;
 public:
 	void InitializeCells();
 	void UpdateCellColor(int row, int col);
@@ -33,6 +32,8 @@ public:
 	CRect CreateRect(int left, int top);
 	void OnInitialUpdate() override;
 	void SetCellSize(int width, int height);
+	void AdjustMatrix(int row, int col);
+	void AdjustRowsAndColumns(int row, int col);
 // Operations
 public:
 
