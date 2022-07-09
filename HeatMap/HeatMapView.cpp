@@ -225,8 +225,7 @@ void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (row >= GetDocument()->_rows || col >= GetDocument()->_columns) {
 		AdjustMatrix(row, col);
 		UpdateCellColor(row, col);
-		InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));
-		Invalidate();
+		InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));		
 		return;
 	}
 	UpdateCellColor(row, col);
