@@ -109,6 +109,11 @@ CRect CHeatMapView::CreateRect(int left, int top)
 
 void CHeatMapView::OnInitialUpdate()
 {
+	if (GetDocument()->isLoading) {
+		Invalidate();
+		GetDocument()->isLoading = false;
+		return;
+	}
 	InitializeCells();
 }
 
@@ -171,9 +176,10 @@ void CHeatMapView::OnDraw(CDC* pDC)
 
 	for (int i = 0; i < numRows; ++i) {
 		for (int j = 0; j < numColumns; ++j) {
-			CBrush brush;
-			brush.CreateSolidBrush(GetCellColor(i, j));
-			pDC->FillRect(CreateRect(j * GetDocument()->_cellSize.x, i * GetDocument()->_cellSize.y), &brush);
+			//CBrush brush;
+			//brush.CreateSolidBrush(GetCellColor(i, j));
+			//pDC->FillRect(CreateRect(j * pDoc->_cellSize.x, i * pDoc->_cellSize.y), &brush);
+			pDC->FillSolidRect(CreateRect(j * pDoc->_cellSize.x, i * pDoc->_cellSize.y), GetCellColor(i, j));
 		}
 	}
 

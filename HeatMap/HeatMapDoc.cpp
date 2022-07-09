@@ -71,6 +71,7 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 	else
 	{
 		// TODO: add loading code here
+		isLoading = true;
 		_cellColorMatrix.clear();
 		ar >> _rows;
 		ar >> _columns;
