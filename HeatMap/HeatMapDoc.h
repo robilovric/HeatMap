@@ -4,7 +4,7 @@
 
 
 #pragma once
-
+#include<vector>
 
 class CHeatMapDoc : public CDocument
 {
@@ -14,7 +14,12 @@ protected: // create from serialization only
 
 // Attributes
 public:
-
+	CRect rect;
+	std::vector<std::vector<UINT>> _cellColorMatrix;
+	POINT _cellSize;
+	POINT _lastCell;
+	int _rows = 15;
+	int _columns = 20;
 // Operations
 public:
 

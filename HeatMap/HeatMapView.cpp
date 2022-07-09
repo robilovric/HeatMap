@@ -58,33 +58,33 @@ BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CHeatMapView::InitializeCells()
 {
-	_lastCell.x = -1;
-	_lastCell.y = -1;
+	GetDocument()->_lastCell.x = -1;
+	GetDocument()->_lastCell.y = -1;
 	int numRows = GetRows();
 	int numColumns = GetColumns();
-	_cellColorMatrix.clear(); //necessary when we call fuction from Matrix dialog handler
-	_cellColorMatrix.resize(numRows, std::vector<UINT>(numColumns, 0));
+	GetDocument()->_cellColorMatrix.clear(); //necessary when we call fuction from Matrix dialog handler
+	GetDocument()->_cellColorMatrix.resize(numRows, std::vector<UINT>(numColumns, 0));
 }
 
 void CHeatMapView::UpdateCellColor(int row, int col)
 {
-	_cellColorMatrix[row][col] += 1;
+	GetDocument()->_cellColorMatrix[row][col] += 1;
 }
 
 
 int CHeatMapView::GetRows()
 {
-	return _rows;
+	return GetDocument()->_rows;
 }
 
 int CHeatMapView::GetColumns()
 {
-	return _columns;
+	return GetDocument()->_columns;
 }
 
 COLORREF CHeatMapView::GetCellColor(int row, int col)
 {
-	switch (_cellColorMatrix[row][col])
+	switch (GetDocument()->_cellColorMatrix[row][col])
 	{
 	case 0:
 		return RGB(255, 255, 255); // za debug svrhe sam maka iz bijele boje 
@@ -104,7 +104,7 @@ COLORREF CHeatMapView::GetCellColor(int row, int col)
 
 CRect CHeatMapView::CreateRect(int left, int top)
 {
-	return { left, top, left + _cellSize.x, top + _cellSize.y };
+	return { left, top, left + GetDocument()->_cellSize.x, top + GetDocument()->_cellSize.y };
 }
 
 void CHeatMapView::OnInitialUpdate()
@@ -114,30 +114,30 @@ void CHeatMapView::OnInitialUpdate()
 
 void CHeatMapView::SetCellSize(int width, int height)
 {
-	_cellSize.x = width / _columns;
-	_cellSize.y = height / _rows;
+	GetDocument()->_cellSize.x = width / GetDocument()->_columns;
+	GetDocument()->_cellSize.y = height / GetDocument()->_rows;
 }
 
 void CHeatMapView::AdjustMatrix(int row, int col)
 {
 	std::vector<std::vector<unsigned int>> _cellColorMatrixTemp;
-	if (row >= _rows && col >= _columns)
+	if (row >= GetDocument()->_rows && col >= GetDocument()->_columns)
 	{
 		_cellColorMatrixTemp.resize(row+1, std::vector<UINT>(col+1, 0));
 	}
-	else if (row >= _rows && col < _columns) {
-		_cellColorMatrixTemp.resize(row + 1, std::vector<UINT>(_columns, 0));
+	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) {
+		_cellColorMatrixTemp.resize(row + 1, std::vector<UINT>(GetDocument()->_columns, 0));
 	}
 	else {
-		_cellColorMatrixTemp.resize(_rows, std::vector<UINT>(col+1, 0));
+		_cellColorMatrixTemp.resize(GetDocument()->_rows, std::vector<UINT>(col+1, 0));
 	}
-	for (int i = 0; i < _rows; ++i) {
-		for (int j = 0; j < _columns; ++j) {
-			_cellColorMatrixTemp[i][j] = _cellColorMatrix[i][j];
+	for (int i = 0; i < GetDocument()->_rows; ++i) {
+		for (int j = 0; j < GetDocument()->_columns; ++j) {
+			_cellColorMatrixTemp[i][j] = GetDocument()->_cellColorMatrix[i][j];
 		}
 	}
 
-	_cellColorMatrix.swap(_cellColorMatrixTemp);
+	GetDocument()->_cellColorMatrix.swap(_cellColorMatrixTemp);
 	_cellColorMatrixTemp.clear();
 	_cellColorMatrixTemp.shrink_to_fit();
 	AdjustRowsAndColumns(row, col);
@@ -145,16 +145,16 @@ void CHeatMapView::AdjustMatrix(int row, int col)
 
 void CHeatMapView::AdjustRowsAndColumns(int row, int col)
 {
-	if (row >= _rows && col >= _columns) {
-		_rows += ++row - _rows;
-		_columns += ++col - _columns;
+	if (row >= GetDocument()->_rows && col >= GetDocument()->_columns) {
+		GetDocument()->_rows += ++row - GetDocument()->_rows;
+		GetDocument()->_columns += ++col - GetDocument()->_columns;
 	}
-	else if (row >= _rows && col < _columns) {
-		_rows += ++row - _rows;
+	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) {
+		GetDocument()->_rows += ++row - GetDocument()->_rows;
 	}
 	else
 	{
-		_columns += ++col - _columns;
+		GetDocument()->_columns += ++col - GetDocument()->_columns;
 	}
 }
 
@@ -173,7 +173,7 @@ void CHeatMapView::OnDraw(CDC* pDC)
 		for (int j = 0; j < numColumns; ++j) {
 			CBrush brush;
 			brush.CreateSolidBrush(GetCellColor(i, j));
-			pDC->FillRect(CreateRect(j * _cellSize.x, i * _cellSize.y), &brush);
+			pDC->FillRect(CreateRect(j * GetDocument()->_cellSize.x, i * GetDocument()->_cellSize.y), &brush);
 		}
 	}
 
@@ -220,17 +220,17 @@ CHeatMapDoc* CHeatMapView::GetDocument() const // non-debug version is inline
 void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
-	int row = point.y / _cellSize.y;
-	int col = point.x / _cellSize.x;
-	if (row >= _rows || col >= _columns) {
+	int row = point.y / GetDocument()->_cellSize.y;
+	int col = point.x / GetDocument()->_cellSize.x;
+	if (row >= GetDocument()->_rows || col >= GetDocument()->_columns) {
 		AdjustMatrix(row, col);
 		UpdateCellColor(row, col);
-		InvalidateRect(CreateRect(col * _cellSize.x, row * _cellSize.y));
+		InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));
 		Invalidate();
 		return;
 	}
 	UpdateCellColor(row, col);
-	InvalidateRect(CreateRect(col * _cellSize.x, row * _cellSize.y));
+	InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));
 
 	CView::OnLButtonDown(nFlags, point); //dali je ovo potrebno?
 }
@@ -261,18 +261,18 @@ void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO: Add your message handler code here and/or call default
-	int row = point.y / _cellSize.y;
-	int col = point.x / _cellSize.x;
-	if (row >= _rows|| col >= _columns) {
+	int row = point.y / GetDocument()->_cellSize.y;
+	int col = point.x / GetDocument()->_cellSize.x;
+	if (row >= GetDocument()->_rows || col >= GetDocument()->_columns) {
 		AdjustMatrix(row, col);
 		UpdateCellColor(row, col);
-		InvalidateRect(CreateRect(col * _cellSize.x, row * _cellSize.y));
+		InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));
 		return;
 	}
-	if (row != _lastCell.x || col != _lastCell.y) {
-		_lastCell.x = row; _lastCell.y = col;
+	if (row != GetDocument()->_lastCell.x || col != GetDocument()->_lastCell.y) {
+		GetDocument()->_lastCell.x = row; GetDocument()->_lastCell.y = col;
 		UpdateCellColor(row, col);
-		InvalidateRect(CreateRect(col * _cellSize.x, row * _cellSize.y));
+		InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));
 	}
 
 	CView::OnMouseMove(nFlags, point); //i ovo takodjer? jer to bude po defaultu izgenerirano kad dodam handler
@@ -282,14 +282,14 @@ void CHeatMapView::OnToolsMatrix()
 {
 	// TODO: Add your command handler code here
 	CMatrixDlg dlg;
-	dlg.m_Rows = _rows;
-	dlg.m_Columns = _columns;
+	dlg.m_Rows = GetDocument()->_rows;
+	dlg.m_Columns = GetDocument()->_columns;
 	if (dlg.DoModal() == IDOK) {
-		_rows = dlg.m_Rows;
-		_columns = dlg.m_Columns;
+		GetDocument()->_rows = dlg.m_Rows;
+		GetDocument()->_columns = dlg.m_Columns;
 		InitializeCells();
-		GetClientRect(rect);
-		SetCellSize(rect.right, rect.bottom);
+		GetClientRect(GetDocument()->rect);
+		SetCellSize(GetDocument()->rect.right, GetDocument()->rect.bottom);
 		Invalidate();
 	}
 

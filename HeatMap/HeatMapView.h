@@ -15,14 +15,10 @@ protected: // create from serialization only
 // Attributes
 public:
 	CHeatMapDoc* GetDocument() const;
-	CRect rect;
+
 //custom members and functions 
 private:
-	std::vector<std::vector<unsigned int>> _cellColorMatrix;
-	POINT _cellSize;
-	POINT _lastCell;
-	int _rows = 15;
-	int _columns = 20;
+
 public:
 	void InitializeCells();
 	void UpdateCellColor(int row, int col);
