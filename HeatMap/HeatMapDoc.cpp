@@ -71,16 +71,14 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 	else
 	{
 		// TODO: add loading code here
-		isLoading = true;
 		_cellColorMatrix.clear();
 		ar >> _rows;
 		ar >> _columns;
-		int holder;
+		//int holder;
 		_cellColorMatrix.resize(_rows, std::vector<UINT>(_columns, 0));
 		for (int i = 0; i < _rows; ++i) {
 			for (int j = 0; j < _columns; ++j) {
-				ar >> holder;
-				_cellColorMatrix[i][j] = holder;
+				ar >> _cellColorMatrix[i][j];
 			}
 		}
 	}

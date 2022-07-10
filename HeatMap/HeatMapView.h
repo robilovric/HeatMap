@@ -3,8 +3,6 @@
 //
 
 #pragma once 
-#include<vector>
-
 
 class CHeatMapView : public CView
 {

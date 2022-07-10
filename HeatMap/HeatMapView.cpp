@@ -109,12 +109,9 @@ CRect CHeatMapView::CreateRect(int left, int top)
 
 void CHeatMapView::OnInitialUpdate()
 {
-	if (GetDocument()->isLoading) {
-		Invalidate();
-		GetDocument()->isLoading = false;
-		return;
-	}
-	InitializeCells();
+	if (GetDocument()->GetPathName().IsEmpty())
+		InitializeCells();
+	CView::OnInitialUpdate();
 }
 
 void CHeatMapView::SetCellSize(int width, int height)
@@ -130,10 +127,12 @@ void CHeatMapView::AdjustMatrix(int row, int col)
 	{
 		_cellColorMatrixTemp.resize(row+1, std::vector<UINT>(col+1, 0));
 	}
-	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) {
+	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) 
+	{
 		_cellColorMatrixTemp.resize(row + 1, std::vector<UINT>(GetDocument()->_columns, 0));
 	}
-	else {
+	else 
+	{
 		_cellColorMatrixTemp.resize(GetDocument()->_rows, std::vector<UINT>(col+1, 0));
 	}
 	for (int i = 0; i < GetDocument()->_rows; ++i) {
@@ -150,11 +149,13 @@ void CHeatMapView::AdjustMatrix(int row, int col)
 
 void CHeatMapView::AdjustRowsAndColumns(int row, int col)
 {
-	if (row >= GetDocument()->_rows && col >= GetDocument()->_columns) {
+	if (row >= GetDocument()->_rows && col >= GetDocument()->_columns) 
+	{
 		GetDocument()->_rows += ++row - GetDocument()->_rows;
 		GetDocument()->_columns += ++col - GetDocument()->_columns;
 	}
-	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) {
+	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) 
+	{
 		GetDocument()->_rows += ++row - GetDocument()->_rows;
 	}
 	else
@@ -176,9 +177,6 @@ void CHeatMapView::OnDraw(CDC* pDC)
 
 	for (int i = 0; i < numRows; ++i) {
 		for (int j = 0; j < numColumns; ++j) {
-			//CBrush brush;
-			//brush.CreateSolidBrush(GetCellColor(i, j));
-			//pDC->FillRect(CreateRect(j * pDoc->_cellSize.x, i * pDoc->_cellSize.y), &brush);
 			pDC->FillSolidRect(CreateRect(j * pDoc->_cellSize.x, i * pDoc->_cellSize.y), GetCellColor(i, j));
 		}
 	}
@@ -225,6 +223,9 @@ CHeatMapDoc* CHeatMapView::GetDocument() const // non-debug version is inline
 
 void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
+	if (GetDocument()->_mode == 1) {
+		return;
+	}
 	// TODO: Add your message handler code here and/or call default
 	int row = point.y / GetDocument()->_cellSize.y;
 	int col = point.x / GetDocument()->_cellSize.x;
@@ -265,6 +266,9 @@ void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 
 void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 {
+	if (GetDocument()->_mode == 0) {
+		return;
+	}
 	// TODO: Add your message handler code here and/or call default
 	int row = point.y / GetDocument()->_cellSize.y;
 	int col = point.x / GetDocument()->_cellSize.x;
@@ -305,5 +309,23 @@ void CHeatMapView::OnToolsMode()
 {
 	// TODO: Add your command handler code here
 	CModeDlg dlg;
-	dlg.DoModal();
+	dlg.m_CurrentMode = GetDocument()->_modeTxt; 
+	if (dlg.DoModal() == IDOK) {
+		GetDocument()->_mode = dlg.newMode;
+		switch (dlg.newMode)
+		{
+		case 0:
+			GetDocument()->_modeTxt = _T("Click monitoring");
+			break;
+		case 1:
+			GetDocument()->_modeTxt = _T("Mouse monitoring");
+			break;
+		case 2:
+			GetDocument()->_modeTxt = _T("Dual");
+			break;
+		default:
+			break;
+		}
+	}
+
 }

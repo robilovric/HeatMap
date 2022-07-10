@@ -22,4 +22,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CComboBox m_Mode;
+	int newMode;
+	afx_msg void OnSelchangeComboModes();
+	CString m_CurrentMode;
 };

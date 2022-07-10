@@ -20,7 +20,8 @@ public:
 	POINT _lastCell;
 	int _rows = 15;
 	int _columns = 20;
-	bool isLoading = false;
+	int _mode = 2;
+	CString _modeTxt = _T("Dual");
 // Operations
 public:
 
