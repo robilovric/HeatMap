@@ -18,7 +18,7 @@ public:
 private:
 
 public:
-	void InitializeCells();
+
 	void UpdateCellColor(int row, int col);
 	int GetRows();
 	int GetColumns();

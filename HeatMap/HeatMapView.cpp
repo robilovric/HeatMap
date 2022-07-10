@@ -56,16 +56,6 @@ BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CHeatMapView drawing
 
-void CHeatMapView::InitializeCells()
-{
-	GetDocument()->_lastCell.x = -1;
-	GetDocument()->_lastCell.y = -1;
-	int numRows = GetRows();
-	int numColumns = GetColumns();
-	GetDocument()->_cellColorMatrix.clear(); //necessary when we call fuction from Matrix dialog handler
-	GetDocument()->_cellColorMatrix.resize(numRows, std::vector<UINT>(numColumns, 0));
-}
-
 void CHeatMapView::UpdateCellColor(int row, int col)
 {
 	GetDocument()->_cellColorMatrix[row][col] += 1;
@@ -109,8 +99,6 @@ CRect CHeatMapView::CreateRect(int left, int top)
 
 void CHeatMapView::OnInitialUpdate()
 {
-	if (GetDocument()->GetPathName().IsEmpty())
-		InitializeCells();
 	CView::OnInitialUpdate();
 }
 
@@ -296,7 +284,7 @@ void CHeatMapView::OnToolsMatrix()
 	if (dlg.DoModal() == IDOK) {
 		GetDocument()->_rows = dlg.m_Rows;
 		GetDocument()->_columns = dlg.m_Columns;
-		InitializeCells();
+		GetDocument()->InitializeCells();
 		GetClientRect(GetDocument()->rect);
 		SetCellSize(GetDocument()->rect.right, GetDocument()->rect.bottom);
 		Invalidate();

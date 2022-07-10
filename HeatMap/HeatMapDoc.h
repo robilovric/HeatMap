@@ -24,7 +24,7 @@ public:
 	CString _modeTxt = _T("Dual");
 // Operations
 public:
-
+	void InitializeCells();
 // Overrides
 public:
 	virtual BOOL OnNewDocument();
