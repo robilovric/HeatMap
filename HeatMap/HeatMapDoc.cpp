@@ -41,8 +41,6 @@ CHeatMapDoc::~CHeatMapDoc()
 
 void CHeatMapDoc::InitializeCells()
 {
-	_lastCell.x = -1;
-	_lastCell.y = -1;
 	_cellColorMatrix.clear(); //necessary when we call fuction from Matrix dialog handler
 	_cellColorMatrix.resize(_rows, std::vector<UINT>(_columns, 0));
 }
@@ -51,7 +49,9 @@ BOOL CHeatMapDoc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
+
 	InitializeCells();
+
 	// TODO: add reinitialization code here
 	// (SDI documents will reuse this document)
 
@@ -82,7 +82,6 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 		_cellColorMatrix.clear();
 		ar >> _rows;
 		ar >> _columns;
-		//int holder;
 		_cellColorMatrix.resize(_rows, std::vector<UINT>(_columns, 0));
 		for (int i = 0; i < _rows; ++i) {
 			for (int j = 0; j < _columns; ++j) {

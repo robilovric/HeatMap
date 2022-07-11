@@ -59,6 +59,10 @@ BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 void CHeatMapView::UpdateCellColor(int row, int col)
 {
 	GetDocument()->_cellColorMatrix[row][col] += 1;
+	if (GetDocument()->_cellColorMatrix[row][col] > GetDocument()->max_value) {
+		GetDocument()->max_value = GetDocument()->_cellColorMatrix[row][col];
+		Invalidate();
+	}
 }
 
 
@@ -74,22 +78,27 @@ int CHeatMapView::GetColumns()
 
 COLORREF CHeatMapView::GetCellColor(int row, int col)
 {
-	switch (GetDocument()->_cellColorMatrix[row][col])
-	{
-	case 0:
-		return RGB(255, 255, 255); // za debug svrhe sam maka iz bijele boje 
-	case 1:
-		return RGB(51, 255, 153); //prozirno zelena
-	case 2:
-		return RGB(0, 255, 0); //zelena
-	case 3:
-		return RGB(255, 51, 153); //roskasta
-	case 4:
-		return RGB(255, 0, 0); // crvena
-	default:
-		break; //proširit ću spektar poslje
-	}
-	return RGB(0, 0, 0);
+//	switch (GetDocument()->_cellColorMatrix[row][col])
+//	{
+//	case 0:
+//		return RGB(255, 255, 255); // za debug svrhe sam maka iz bijele boje 
+//	case 1:
+//		return RGB(51, 255, 153); //prozirno zelena
+//	case 2:
+//		return RGB(0, 255, 0); //zelena
+//	case 3:
+//		return RGB(255, 51, 153); //roskasta
+//	case 4:
+//		return RGB(255, 0, 0); // crvena
+//	default:
+//		break; //proširit ću spektar poslje
+//	}
+//	return RGB(0, 0, 0);
+	int h = 255 * GetDocument()->_cellColorMatrix[row][col] / GetDocument()->max_value;
+	float s = 1.f;
+	float l = 0.5f;
+
+	return HSLtoRGB(h, s, l);
 }
 
 CRect CHeatMapView::CreateRect(int left, int top)
@@ -150,6 +159,39 @@ void CHeatMapView::AdjustRowsAndColumns(int row, int col)
 	{
 		GetDocument()->_columns += ++col - GetDocument()->_columns;
 	}
+}
+
+COLORREF CHeatMapView::HSLtoRGB(int h, float s, float l)
+{
+	int r, g, b;
+	if (0 == s) {
+		r = g = b = l; // achromatic
+	}
+	else {
+		float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+		float p = 2 * l - q;
+		r = HueToRGB(p, q, h + 1. / 3) * 255;
+		g = HueToRGB(p, q, h) * 255;
+		b = HueToRGB(p, q, h - 1. / 3) * 255;
+	}
+	return RGB(r, g, b);
+}
+
+float CHeatMapView::HueToRGB(float p, float q, float t)
+{
+	if (t < 0)
+		t += 1;
+	if (t > 1)
+		t -= 1;
+	if (t < 1.f / 6)
+		return p + (q - p) * 6 * t;
+	if (t < 1.f / 2)
+		return q;
+	if (t < 2. / 3)
+		return p + (q - p) * (2.f / 3 - t) * 6;
+
+
+	return p;
 }
 
 void CHeatMapView::OnDraw(CDC* pDC)
@@ -246,7 +288,6 @@ void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 	default:
 		break;
 	}
-
 	CView::OnSize(nType, cx, cy);
 
 }

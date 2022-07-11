@@ -28,6 +28,8 @@ public:
 	void SetCellSize(int width, int height);
 	void AdjustMatrix(int row, int col);
 	void AdjustRowsAndColumns(int row, int col);
+	COLORREF HSLtoRGB(int h, float s, float l);
+	float HueToRGB(float p, float q, float t);
 // Operations
 public:
 
