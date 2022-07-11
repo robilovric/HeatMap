@@ -168,11 +168,11 @@ COLORREF CHeatMapView::HSLtoRGB(int h, float s, float l)
 		r = g = b = l; // achromatic
 	}
 	else {
-		float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+		float q = l < 0.5f ? l * (1 + s) : l + s - l * s;
 		float p = 2 * l - q;
-		r = HueToRGB(p, q, h + 1. / 3) * 255;
+		r = HueToRGB(p, q, h + 1.f / 3) * 255;
 		g = HueToRGB(p, q, h) * 255;
-		b = HueToRGB(p, q, h - 1. / 3) * 255;
+		b = HueToRGB(p, q, h - 1.f / 3) * 255;
 	}
 	return RGB(r, g, b);
 }
@@ -187,7 +187,7 @@ float CHeatMapView::HueToRGB(float p, float q, float t)
 		return p + (q - p) * 6 * t;
 	if (t < 1.f / 2)
 		return q;
-	if (t < 2. / 3)
+	if (t < 2.f / 3)
 		return p + (q - p) * (2.f / 3 - t) * 6;
 
 
