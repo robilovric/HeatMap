@@ -31,7 +31,6 @@ END_MESSAGE_MAP()
 
 CHeatMapDoc::CHeatMapDoc() noexcept
 {
-	// TODO: add one-time construction code here
 
 }
 
@@ -51,10 +50,6 @@ BOOL CHeatMapDoc::OnNewDocument()
 		return FALSE;
 
 	InitializeCells();
-
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
-
 	return TRUE;
 }
 
@@ -67,7 +62,6 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
 		ar << _rows;
 		ar << _columns;
 		for (int i = 0; i < _rows; ++i) {
@@ -78,7 +72,6 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 	}
 	else
 	{
-		// TODO: add loading code here
 		_cellColorMatrix.clear();
 		ar >> _rows;
 		ar >> _columns;

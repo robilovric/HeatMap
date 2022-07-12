@@ -38,7 +38,6 @@ END_MESSAGE_MAP()
 
 CHeatMapView::CHeatMapView() noexcept
 {
-	// TODO: add construction code here
 }
 
 CHeatMapView::~CHeatMapView()
@@ -48,9 +47,6 @@ CHeatMapView::~CHeatMapView()
 
 BOOL CHeatMapView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
-
 	return CView::PreCreateWindow(cs);
 }
 
@@ -82,6 +78,7 @@ COLORREF CHeatMapView::GetCellColor(int row, int col)
 	if (value == 0) {
 		return RGB(255, 255, 255);
 	}
+
 	float h = float(value) / GetDocument()->max_value;
 	float s = 1.f;
 	float l = 0.5f;
@@ -107,21 +104,25 @@ void CHeatMapView::SetCellSize(int width, int height)
 
 void CHeatMapView::AdjustMatrix(int row, int col)
 {
+	int m_rows = GetDocument()->_rows;
+	int m_columns = GetDocument()->_columns;
 	std::vector<std::vector<unsigned int>> _cellColorMatrixTemp;
-	if (row >= GetDocument()->_rows && col >= GetDocument()->_columns)
+
+	if (row >= m_rows && col >= m_columns)
 	{
 		_cellColorMatrixTemp.resize(row+1, std::vector<UINT>(col+1, 0));
 	}
-	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) 
+	else if (row >= m_rows && col < m_columns) 
 	{
-		_cellColorMatrixTemp.resize(row + 1, std::vector<UINT>(GetDocument()->_columns, 0));
+		_cellColorMatrixTemp.resize(row + 1, std::vector<UINT>(m_columns, 0));
 	}
 	else 
 	{
-		_cellColorMatrixTemp.resize(GetDocument()->_rows, std::vector<UINT>(col+1, 0));
+		_cellColorMatrixTemp.resize(m_rows, std::vector<UINT>(col+1, 0));
 	}
-	for (int i = 0; i < GetDocument()->_rows; ++i) {
-		for (int j = 0; j < GetDocument()->_columns; ++j) {
+
+	for (int i = 0; i < m_rows; ++i) {
+		for (int j = 0; j < m_columns; ++j) {
 			_cellColorMatrixTemp[i][j] = GetDocument()->_cellColorMatrix[i][j];
 		}
 	}
@@ -134,18 +135,21 @@ void CHeatMapView::AdjustMatrix(int row, int col)
 
 void CHeatMapView::AdjustRowsAndColumns(int row, int col)
 {
-	if (row >= GetDocument()->_rows && col >= GetDocument()->_columns) 
+	int m_rows = GetDocument()->_rows;
+	int m_columns = GetDocument()->_columns;
+
+	if (row >= m_rows && col >= m_columns) 
 	{
-		GetDocument()->_rows += ++row - GetDocument()->_rows;
-		GetDocument()->_columns += ++col - GetDocument()->_columns;
+		GetDocument()->_rows += ++row - m_rows;
+		GetDocument()->_columns += ++col - m_columns;
 	}
-	else if (row >= GetDocument()->_rows && col < GetDocument()->_columns) 
+	else if (row >= m_rows && col < m_columns) 
 	{
-		GetDocument()->_rows += ++row - GetDocument()->_rows;
+		GetDocument()->_rows += ++row - m_rows;
 	}
 	else
 	{
-		GetDocument()->_columns += ++col - GetDocument()->_columns;
+		GetDocument()->_columns += ++col - m_columns;
 	}
 }
 
@@ -182,6 +186,7 @@ float CHeatMapView::HueToRGB(float p, float q, float t)
 	return p;
 }
 
+
 void CHeatMapView::OnDraw(CDC* pDC)
 {
 	CHeatMapDoc* pDoc = GetDocument();
@@ -189,7 +194,6 @@ void CHeatMapView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	// TODO: add draw code for native data here
 	int numRows = GetRows();
 	int numColumns = GetColumns();
 
@@ -200,20 +204,6 @@ void CHeatMapView::OnDraw(CDC* pDC)
 	}
 
 }
-
-void CHeatMapView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	ClientToScreen(&point);
-	OnContextMenu(this, point);
-}
-
-void CHeatMapView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
-{
-#ifndef SHARED_HANDLERS
-	theApp.GetContextMenuManager()->ShowPopupMenu(IDR_POPUP_EDIT, point.x, point.y, this, TRUE);
-#endif
-}
-
 
 // CHeatMapView diagnostics
 
@@ -244,7 +234,7 @@ void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (GetDocument()->_mode == 1) {
 		return;
 	}
-	// TODO: Add your message handler code here and/or call default
+
 	int row = point.y / GetDocument()->_cellSize.y;
 	int col = point.x / GetDocument()->_cellSize.x;
 	if (row >= GetDocument()->_rows || col >= GetDocument()->_columns) {
@@ -262,22 +252,10 @@ void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 {
-	// TODO: Add your message handler code here
-	switch (nType)
-	{
-	case SIZE_MAXIMIZED:
-		SetCellSize(cx, cy);
-		Invalidate();
-		break;
-	case SIZE_RESTORED:
-		SetCellSize(cx, cy);
-		Invalidate();
-		break;
-	default:
-		break;
-	}
-	CView::OnSize(nType, cx, cy);
+	SetCellSize(cx, cy);
+	Invalidate();
 
+	CView::OnSize(nType, cx, cy); //i ovo?
 }
 
 
@@ -286,7 +264,7 @@ void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 	if (GetDocument()->_mode == 2) {
 		return;
 	}
-	// TODO: Add your message handler code here and/or call default
+
 	int row = point.y / GetDocument()->_cellSize.y;
 	int col = point.x / GetDocument()->_cellSize.x;
 	if (row >= GetDocument()->_rows || col >= GetDocument()->_columns) {
@@ -306,7 +284,6 @@ void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CHeatMapView::OnToolsMatrix()
 {
-	// TODO: Add your command handler code here
 	CMatrixDlg dlg;
 	dlg.m_Rows = GetDocument()->_rows;
 	dlg.m_Columns = GetDocument()->_columns;
@@ -324,10 +301,8 @@ void CHeatMapView::OnToolsMatrix()
 
 void CHeatMapView::OnToolsMode()
 {
-	// TODO: Add your command handler code here
 	CModeDlg dlg;
 	if (dlg.DoModal() == IDOK) {
 		GetDocument()->_mode = dlg.newMode;
 	}
-
 }

@@ -7,7 +7,6 @@
 #include "afxdialogex.h"
 #include "afxdd_.h"
 #include "afxwin.h"
-#include "HeatMapDoc.h"
 
 
 // CModeDlg dialog

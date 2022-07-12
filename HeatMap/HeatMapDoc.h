@@ -22,6 +22,7 @@ public:
 	int _columns = 20;
 	int _mode;
 	int max_value = 1;
+
 // Operations
 public:
 	void InitializeCells();
