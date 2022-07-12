@@ -78,27 +78,15 @@ int CHeatMapView::GetColumns()
 
 COLORREF CHeatMapView::GetCellColor(int row, int col)
 {
-//	switch (GetDocument()->_cellColorMatrix[row][col])
-//	{
-//	case 0:
-//		return RGB(255, 255, 255); // za debug svrhe sam maka iz bijele boje 
-//	case 1:
-//		return RGB(51, 255, 153); //prozirno zelena
-//	case 2:
-//		return RGB(0, 255, 0); //zelena
-//	case 3:
-//		return RGB(255, 51, 153); //roskasta
-//	case 4:
-//		return RGB(255, 0, 0); // crvena
-//	default:
-//		break; //proširit ću spektar poslje
-//	}
-//	return RGB(0, 0, 0);
-	int h = 255 * GetDocument()->_cellColorMatrix[row][col] / GetDocument()->max_value;
+	const auto value = GetDocument()->_cellColorMatrix[row][col];
+	if (value == 0) {
+		return RGB(255, 255, 255);
+	}
+	float h = float(value) / GetDocument()->max_value;
 	float s = 1.f;
 	float l = 0.5f;
 
-	return HSLtoRGB(h, s, l);
+	return HSLtoRGB(h, s, l);	
 }
 
 CRect CHeatMapView::CreateRect(int left, int top)
@@ -161,14 +149,14 @@ void CHeatMapView::AdjustRowsAndColumns(int row, int col)
 	}
 }
 
-COLORREF CHeatMapView::HSLtoRGB(int h, float s, float l)
+COLORREF CHeatMapView::HSLtoRGB(float h, float s, float l)
 {
-	int r, g, b;
+	float r, g, b;
 	if (0 == s) {
 		r = g = b = l; // achromatic
 	}
 	else {
-		float q = l < 0.5f ? l * (1 + s) : l + s - l * s;
+		float q = l <= 0.5f ? l * (1 + s) : l + s - l * s;
 		float p = 2 * l - q;
 		r = HueToRGB(p, q, h + 1.f / 3) * 255;
 		g = HueToRGB(p, q, h) * 255;

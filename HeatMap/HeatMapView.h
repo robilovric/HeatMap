@@ -16,9 +16,10 @@ public:
 
 //custom members and functions 
 private:
+	COLORREF HSLtoRGB(float h, float s, float l);
+	float HueToRGB(float p, float q, float t);
 
 public:
-
 	void UpdateCellColor(int row, int col);
 	int GetRows();
 	int GetColumns();
@@ -28,8 +29,7 @@ public:
 	void SetCellSize(int width, int height);
 	void AdjustMatrix(int row, int col);
 	void AdjustRowsAndColumns(int row, int col);
-	COLORREF HSLtoRGB(int h, float s, float l);
-	float HueToRGB(float p, float q, float t);
+
 // Operations
 public:
 
