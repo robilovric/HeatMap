@@ -302,6 +302,7 @@ void CHeatMapView::OnToolsMatrix()
 void CHeatMapView::OnToolsMode()
 {
 	CModeDlg dlg;
+	dlg.newMode = GetDocument()->_mode;
 	if (dlg.DoModal() == IDOK) {
 		GetDocument()->_mode = dlg.newMode;
 	}

@@ -3,7 +3,6 @@
 // Used by HeatMap.rc
 //
 #define IDD_ABOUTBOX                    100
-#define IDR_POPUP_EDIT                  119
 #define ID_STATUSBAR_PANE1              120
 #define ID_STATUSBAR_PANE2              121
 #define IDS_STATUS_PANE1                122
@@ -17,10 +16,6 @@
 #define ID_WINDOW_MANAGER               131
 #define ID_VIEW_FILEVIEW                133
 #define ID_VIEW_CLASSVIEW               134
-#define ID_PROPERTIES                   135
-#define ID_OPEN                         136
-#define ID_OPEN_WITH                    137
-#define ID_DUMMY_COMPILE                138
 #define ID_CLASS_ADD_MEMBER_FUNCTION    139
 #define ID_CLASS_ADD_MEMBER_VARIABLE    140
 #define ID_CLASS_DEFINITION             141
@@ -31,7 +26,6 @@
 #define ID_SORTING_SORTALPHABETIC       146
 #define ID_SORTING_SORTBYTYPE           147
 #define ID_SORTING_SORTBYACCESS         148
-#define ID_VIEW_OUTPUTWND               149
 #define ID_VIEW_PROPERTIESWND           150
 #define ID_SORTPROPERTIES               151
 #define ID_PROPERTIES1                  152
@@ -49,12 +43,9 @@
 #define IDI_OUTPUT_WND_HC               166
 #define IDI_PROPERTIES_WND              167
 #define IDI_PROPERTIES_WND_HC           168
-#define IDR_EXPLORER                    169
 #define IDB_EXPLORER_24                 170
 #define IDR_SORT                        171
 #define IDB_SORT_24                     172
-#define IDR_POPUP_SORT                  173
-#define IDR_POPUP_EXPLORER              174
 #define IDB_FILE_VIEW                   175
 #define IDB_FILE_VIEW_24                176
 #define IDB_CLASS_VIEW                  177
@@ -62,7 +53,6 @@
 #define IDR_MENU_IMAGES                 179
 #define IDB_MENU_IMAGES_24              180
 #define ID_TOOLS_MACRO                  181
-#define IDR_OUTPUT_POPUP                182
 #define IDR_PROPERTIES                  183
 #define IDB_PROPERTIES_HC               184
 #define IDR_THEME_MENU                  200

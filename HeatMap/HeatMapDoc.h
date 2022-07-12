@@ -20,7 +20,7 @@ public:
 	POINT _lastCell{ -1, -1 };
 	int _rows = 15;
 	int _columns = 20;
-	int _mode;
+	int _mode = 0;
 	int max_value = 1;
 
 // Operations
