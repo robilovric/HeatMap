@@ -20,8 +20,7 @@ public:
 	POINT _lastCell{ -1, -1 };
 	int _rows = 15;
 	int _columns = 20;
-	int _mode = 2;
-	CString _modeTxt = _T("Dual");
+	int _mode;
 	int max_value = 1;
 // Operations
 public:

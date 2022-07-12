@@ -283,7 +283,7 @@ void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 
 void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 {
-	if (GetDocument()->_mode == 0) {
+	if (GetDocument()->_mode == 2) {
 		return;
 	}
 	// TODO: Add your message handler code here and/or call default
@@ -326,23 +326,8 @@ void CHeatMapView::OnToolsMode()
 {
 	// TODO: Add your command handler code here
 	CModeDlg dlg;
-	dlg.m_CurrentMode = GetDocument()->_modeTxt; 
 	if (dlg.DoModal() == IDOK) {
 		GetDocument()->_mode = dlg.newMode;
-		switch (dlg.newMode)
-		{
-		case 0:
-			GetDocument()->_modeTxt = _T("Click monitoring");
-			break;
-		case 1:
-			GetDocument()->_modeTxt = _T("Mouse monitoring");
-			break;
-		case 2:
-			GetDocument()->_modeTxt = _T("Dual");
-			break;
-		default:
-			break;
-		}
 	}
 
 }
