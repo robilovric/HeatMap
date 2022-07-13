@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "ViewTree.h"
 
 class CFileViewToolBar : public CMFCToolBar
 {
@@ -25,7 +24,7 @@ public:
 // Attributes
 protected:
 
-	CViewTree m_wndFileView;
+	//CViewTree m_wndFileView;
 	CImageList m_FileViewImages;
 	CFileViewToolBar m_wndToolBar;
 

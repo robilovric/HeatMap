@@ -182,7 +182,6 @@ float CHeatMapView::HueToRGB(float p, float q, float t)
 	if (t < 2.f / 3)
 		return p + (q - p) * (2.f / 3 - t) * 6;
 
-
 	return p;
 }
 
@@ -202,7 +201,6 @@ void CHeatMapView::OnDraw(CDC* pDC)
 			pDC->FillSolidRect(CreateRect(j * pDoc->_cellSize.x, i * pDoc->_cellSize.y), GetCellColor(i, j));
 		}
 	}
-
 }
 
 // CHeatMapView diagnostics
@@ -245,8 +243,6 @@ void CHeatMapView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	UpdateCellColor(row, col);
 	InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));
-
-	CView::OnLButtonDown(nFlags, point); //dali je ovo potrebno?
 }
 
 
@@ -254,8 +250,6 @@ void CHeatMapView::OnSize(UINT nType, int cx, int cy)
 {
 	SetCellSize(cx, cy);
 	Invalidate();
-
-	CView::OnSize(nType, cx, cy); //i ovo?
 }
 
 
@@ -278,8 +272,6 @@ void CHeatMapView::OnMouseMove(UINT nFlags, CPoint point)
 		UpdateCellColor(row, col);
 		InvalidateRect(CreateRect(col * GetDocument()->_cellSize.x, row * GetDocument()->_cellSize.y));
 	}
-
-	CView::OnMouseMove(nFlags, point); //i ovo takodjer? jer to bude po defaultu izgenerirano kad dodam handler
 }
 
 void CHeatMapView::OnToolsMatrix()
