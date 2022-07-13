@@ -62,6 +62,7 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
+		ar << 777;
 		ar << _rows;
 		ar << _columns;
 		for (int i = 0; i < _rows; ++i) {
@@ -72,6 +73,13 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 	}
 	else
 	{
+		int verifyFormat;
+		CString invalidFormat;
+		ar >> verifyFormat;
+		if (verifyFormat != 777) {
+			//AfxMessageBox(invalidFormat.LoadString(IDS_STRING126));
+			return;
+		}
 		_cellColorMatrix.clear();
 		ar >> _rows;
 		ar >> _columns;

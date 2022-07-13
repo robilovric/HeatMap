@@ -27,9 +27,9 @@ void CMatrixDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_ROWS, m_Rows);
-	DDV_MinMaxInt(pDX, m_Rows, 10, 10000);
+	DDV_MinMaxInt(pDX, m_Rows, 10, 150);
 	DDX_Text(pDX, IDC_EDIT_COLUMNS, m_Columns);
-	DDV_MinMaxInt(pDX, m_Columns, 10, 10000);
+	DDV_MinMaxInt(pDX, m_Columns, 10, 200);
 }
 
 

@@ -79,7 +79,7 @@ COLORREF CHeatMapView::GetCellColor(int row, int col)
 		return RGB(255, 255, 255);
 	}
 
-	float h = float(value) / GetDocument()->max_value;
+	float h = 1 - float(value) / GetDocument()->max_value;
 	float s = 1.f;
 	float l = 0.5f;
 
