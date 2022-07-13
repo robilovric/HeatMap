@@ -48,6 +48,9 @@
     <ClInclude Include="CModeDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ColorMnagement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HeatMap.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CModeDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorMnagement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

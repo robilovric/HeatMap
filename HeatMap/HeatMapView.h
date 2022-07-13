@@ -16,8 +16,6 @@ public:
 
 //custom members and functions 
 private:
-	COLORREF HSLtoRGB(float h, float s, float l);
-	float HueToRGB(float p, float q, float t);
 
 public:
 	void UpdateCellColor(int row, int col);

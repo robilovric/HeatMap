@@ -10,7 +10,6 @@
 #define IDS_TOOLBAR_STANDARD            124
 #define IDS_TOOLBAR_CUSTOMIZE           125
 #define ID_VIEW_CUSTOMIZE               126
-#define IDS_STRING126                   126
 #define IDR_MAINFRAME                   128
 #define IDR_MAINFRAME_256               129
 #define IDR_HeatMapTYPE                 130
@@ -26,7 +25,6 @@
 #define IDS_CLASS_VIEW                  156
 #define IDS_OUTPUT_WND                  157
 #define IDS_PROPERTIES_WND              158
-#define IDB_SORT_24                     172
 #define IDB_MENU_IMAGES_24              180
 #define IDB_PROPERTIES_HC               184
 #define IDR_THEME_MENU                  200

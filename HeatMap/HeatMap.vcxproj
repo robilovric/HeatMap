@@ -186,6 +186,7 @@
     <ClInclude Include="ChildFrm.h" />
     <ClInclude Include="CMatrixDlg.h" />
     <ClInclude Include="CModeDlg.h" />
+    <ClInclude Include="ColorMnagement.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="HeatMap.h" />
     <ClInclude Include="HeatMapDoc.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="ChildFrm.cpp" />
     <ClCompile Include="CMatrixDlg.cpp" />
     <ClCompile Include="CModeDlg.cpp" />
+    <ClCompile Include="ColorMnagement.cpp" />
     <ClCompile Include="HeatMap.cpp" />
     <ClCompile Include="HeatMapDoc.cpp" />
     <ClCompile Include="HeatMapView.cpp" />

@@ -78,7 +78,7 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 		ar >> verifyFormat;
 		ar >> _rows;
 		ar >> _columns;
-		if (verifyFormat != magic_number || _rows>rows_max || _columns>columns_max) {
+		if (verifyFormat != magic_number || _rows > rows_max || _columns > columns_max) {
 			throw new CArchiveException(CArchiveException::badIndex);
 		}
 		_cellColorMatrix.clear();
