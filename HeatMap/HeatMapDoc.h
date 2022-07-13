@@ -22,6 +22,10 @@ public:
 	int _columns = 20;
 	int _mode = 0;
 	int max_value = 1;
+	static const int magic_number = 777;
+	//larger than in DDV definition because of AdjustMatrix() impact
+	static const int rows_max = 250; 
+	static const int columns_max = 350;
 
 // Operations
 public:

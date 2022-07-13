@@ -62,7 +62,7 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		ar << 777;
+		ar << magic_number;
 		ar << _rows;
 		ar << _columns;
 		for (int i = 0; i < _rows; ++i) {
@@ -76,13 +76,12 @@ void CHeatMapDoc::Serialize(CArchive& ar)
 		int verifyFormat;
 		CString invalidFormat;
 		ar >> verifyFormat;
-		if (verifyFormat != 777) {
-			//AfxMessageBox(invalidFormat.LoadString(IDS_STRING126));
-			return;
-		}
-		_cellColorMatrix.clear();
 		ar >> _rows;
 		ar >> _columns;
+		if (verifyFormat != magic_number || _rows>rows_max || _columns>columns_max) {
+			throw new CArchiveException(CArchiveException::badIndex);
+		}
+		_cellColorMatrix.clear();
 		_cellColorMatrix.resize(_rows, std::vector<UINT>(_columns, 0));
 		for (int i = 0; i < _rows; ++i) {
 			for (int j = 0; j < _columns; ++j) {
